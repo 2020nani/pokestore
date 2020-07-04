@@ -1,10 +1,18 @@
 import React from 'react';
 import {connect} from 'react-redux'
+import * as Cartactions from '../../store/modules/cart/actions'
 import {MdRemoveCircleOutline,MdAddCircleOutline,MdDelete} from 'react-icons/md'
 import { Container,ProductTable,Total} from './styles';
+import {bindActionCreators} from 'redux'
+import {formatPrice} from '../../util/format'
+function Cart({cart, total, removeFromCart, updateAmount})  {
+   function increment(pokemon){
+    updateAmount(pokemon.id, pokemon.amount + 1)
+   }
 
-function Cart({cart})  {
-  
+   function decrement(pokemon){
+    updateAmount(pokemon.id, pokemon.amount - 1)
+   }
   return (
   <Container>
     <ProductTable>
@@ -19,29 +27,29 @@ function Cart({cart})  {
     <tbody>
       
       {cart.map(pokemon =>(
-        console.log(pokemon),
+        
         <tr>
         <td>
-          <img src="" alt="pok"/>
+          <img src= {pokemon.sprites.front_shiny} alt={pokemon.name}/>
         </td>
         <td>
           <strong>{pokemon.name}</strong>
-          <span>999</span>
+      <span>{pokemon.priceFormatted}</span>
         </td>
         <td>
-         <button type="button">
+         <button type="button" onClick={()=> decrement(pokemon)}>
            <MdRemoveCircleOutline size={20} color='#7159c1' />
          </button>
-         <input type="number" readOnly value={1}/>
-         <button type="button">
+         <input type="number" readOnly value={pokemon.amount}/>
+         <button type="button" onClick={()=> increment(pokemon)}>
            <MdAddCircleOutline size={20} color='#7159c1' />
          </button>
         </td>
         <td>
-          <strong>66564</strong>
+      <strong>{pokemon.subtotal}</strong>
         </td>
         <td>
-          <button type="button">
+          <button type="button" onClick={()=>removeFromCart(pokemon.id)}>
             <MdDelete size={20} color="#7159c1"/>
           </button>
         </td>
@@ -53,14 +61,26 @@ function Cart({cart})  {
       <button type="button">Finalizar pedido</button>
       <Total>
         <span>TOTAL</span>
-        <strong>456</strong>
+      <strong>{total}</strong>
       </Total>
     </footer>
   </Container>
   );
 }
 const mapStateToProps = state => ({
-cart:state.cart,
+cart:state.cart.map(pokemon =>({
+  ...pokemon,
+  //add variavel state pokemon
+  subtotal: formatPrice(pokemon.order *pokemon.amount),
+})),
+total:formatPrice(state.cart.reduce((total, pokemon) =>{
+  return total + pokemon.order * pokemon.amount;
+}, 0)),
 });
+const mapDispatchToProps = dispatch =>
+bindActionCreators(Cartactions,dispatch);
 
-export default connect(mapStateToProps)(Cart)
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+  )(Cart)

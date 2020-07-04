@@ -11,7 +11,7 @@ function* addToCart({ id }) {
     state.cart.find(p => p.id === id)
   );
 
-  const stock = yield call(api.get, `/stock/${id}`);
+ const stock = yield call(api.get, `/stock/${id}`);
 
   const stockAmount = stock.data.amount;
   const currentAmount = productExists ? productExists.amount : 0;
@@ -52,7 +52,7 @@ function* updateAmount({ id, amount }) {
   yield put(updateAmountSuccess(id, amount));
 }
 
-// qual action ouvir e qual método disparar
+//qual action ouvir e qual método disparar
 export default all([
   takeLatest('@cart/ADD_REQUEST', addToCart),
   takeLatest('@cart/UPDATE_AMOUNT_REQUEST', updateAmount),

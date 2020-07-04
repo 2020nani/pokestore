@@ -1,85 +1,78 @@
-import React, {Component}from 'react';
-import {connect} from 'react-redux'
-import {MdAddShoppingCart} from 'react-icons/md';
-import {formatPrice} from '../../util/format'
+import React, { Component } from 'react';
+import { connect } from 'react-redux'
+import {bindActionCreators} from 'redux'
+import { MdAddShoppingCart } from 'react-icons/md';
+import { formatPrice } from '../../util/format'
 import api from '../../services/api';
-import { ProductList} from './styles';
-import {stock} from '../../services/apiProdutos'
-class Home extends Component{
+import { ProductList } from './styles';
+import * as Cartactions from '../../store/modules/cart/actions'
+class Home extends Component {
   state = {
-    pokemons:[],
-    urlImagens:[],
-    amount :[]
+    pokemons: [],
+    urlImagens: [],
+    amount: []
   };
-  
-  async componentDidMount(){
+
+  async componentDidMount() {
     const poks = []
     const url = []
-    
-    for(let i =1;i<=42;i++){
-    const response = await api.get(`pokemon/${i}?limit=42`);
-    const urlimagem = `https://pokeres.bastionbot.org/images/pokemon/${i}.png`
-    const data = stock.map(stock =>({
-      ...stock,
-       priceFormatted: formatPrice(stock.price)
-     }))  
-  
-   this.setState({amount: data})
-   poks.push(response.data)
-   url.push(urlimagem)
-   
-    
-    }
-    this.setState({pokemons: poks})
-    this.setState({urlImagens: url})
-  }
-  
-  handleAddProduct = (
-    pokemon,
-    urlImagens,
-    amount
-  ) => {
-    const {dispatch} = this.props;
 
-    dispatch({
-      type: 'ADD_TO_CART',
-      pokemon,
-      urlImagens,
-      amount
-    })
-  }
-  render(){
-    const {pokemons} = this.state;
-    const {urlImagens} = this.state
-    const {amount} = this.state
+    for (let i = 1; i <= 42; i++) {
+      const response = await api.get(`pokemon/${i}?limit=42`);
+
+      poks.push(response.data)
+    }
+    const data = poks.map(stock =>({
+      ...stock,
+       priceFormatted: formatPrice(stock.order)
+     }))  
+    console.log(data)
+  
+    this.setState({ pokemons: data })
     
+  }
+
+  handleAddProduct = (
+    pokemon
+    
+  ) => {
+    const { addToCartSuccess } = this.props;
+
+    addToCartSuccess(pokemon)
+  }
+  render() {
+    const { pokemons } = this.state;
     return (
       <ProductList>
-         
-        {pokemons.map(pokemon => (
-          <li key={pokemon.id} >
-          <img src={urlImagens[`${pokemon.id-1}`]} alt={pokemon.name}/>
-          <strong>{pokemon.name}</strong>
-        <span>{amount[`${pokemon.id-1}`].priceFormatted}</span>
-          <button type="button" onClick={() => this.handleAddProduct(
-            pokemon,
-            urlImagens[`${pokemon.id-1}`],
-            amount[`${pokemon.id-1}`].priceFormatted
-            )}>
-            <div>
-              <MdAddShoppingCart size={16} color="#fff"/>
-            </div>
-     
-            <span>ADICIONAR AO CARRINHO</span>
-          </button>
-     
-         </li>
-        ))}
-    
-      </ProductList>
-      );
-  }
-  
-}
 
-export default connect()(Home);
+        {pokemons.map(pokemon => (
+          console.log(pokemon.sprites.front_shiny),
+          <li key={pokemon.id} >
+            <img src={pokemon.sprites.front_shiny} alt={pokemon.name} />
+            <strong>{pokemon.name}</strong>
+            <span>{pokemon.priceFormatted}</span>
+            <button type="button" onClick={() => this.handleAddProduct(
+              pokemon,
+              
+            )}>
+              <div>
+                <MdAddShoppingCart size={16} color="#fff" />
+              </div>
+
+              <span>ADICIONAR AO CARRINHO</span>
+            </button>
+
+          </li>
+        ))}
+
+      </ProductList>
+    );
+  }
+
+}
+const mapDispatchToProps = dispatch =>
+bindActionCreators(Cartactions,dispatch);
+
+export default connect(
+  null,
+  mapDispatchToProps)(Home);
