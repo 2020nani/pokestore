@@ -53,7 +53,7 @@ class Home extends Component {
             <strong>{pokemon.name}</strong>
             <span>{pokemon.priceFormatted}</span>
             <button type="button" onClick={() => this.handleAddProduct(
-              pokemon,
+             pokemon,
               
             )}>
               <div>
