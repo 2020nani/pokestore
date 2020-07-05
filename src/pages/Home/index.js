@@ -4,33 +4,36 @@ import {bindActionCreators} from 'redux'
 import { MdAddShoppingCart } from 'react-icons/md';
 import { formatPrice } from '../../util/format'
 import api from '../../services/api';
+import stock from '../../services/apiProdutos'
 import { ProductList } from './styles';
 import * as Cartactions from '../../store/modules/cart/actions'
 class Home extends Component {
   state = {
     pokemons: [],
-    urlImagens: [],
-    amount: []
   };
 
   async componentDidMount() {
     const poks = []
-    const url = []
-
-    for (let i = 1; i <= 42; i++) {
-      const response = await api.get(`pokemon/${i}?limit=42`);
-
+   
+    for (let i = 1; i <= 100; i++) {
+      const response = await api.get(`pokemon/${i}?offset=${parseInt(this.state.offset)}&limit=${parseInt(this.state.limitlimit)}`);
+     
+     
       poks.push(response.data)
+     
     }
+    
     const data = poks.map(stock =>({
       ...stock,
-       priceFormatted: formatPrice(stock.order)
+       priceFormatted: formatPrice(stock.order),
+       
      }))  
-    console.log(data)
+
   
     this.setState({ pokemons: data })
     
   }
+ 
 
   handleAddProduct = (
     pokemon
@@ -43,17 +46,19 @@ class Home extends Component {
   render() {
     const { pokemons } = this.state;
     const {amount} =this.props
+    
     return (
       <ProductList>
-
         {pokemons.map(pokemon => (
-          console.log(pokemon.sprites.front_shiny),
+          
           <li key={pokemon.id} >
             <img src={pokemon.sprites.front_shiny} alt={pokemon.name} />
             <strong>{pokemon.name}</strong>
+            <p>Habilidade:{pokemon.abilities[0].ability.name}</p>
+            
             <span>{pokemon.priceFormatted}</span>
             <button type="button" onClick={() => this.handleAddProduct(
-             pokemon,
+             pokemon
               
             )}>
               <div>
@@ -65,9 +70,12 @@ class Home extends Component {
             </button>
 
           </li>
+          
         ))}
+       
 
       </ProductList>
+      
     );
   }
 

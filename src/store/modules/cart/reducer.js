@@ -3,6 +3,7 @@ import produce from 'immer';
 export default function cart(state = [],action) {
  
   switch (action.type) {
+   
     case 'ADD_TO_CART':
      return produce(state, draft => {
         const pokIndex  = draft.findIndex(p => p.id === action.pokemon.id);
