@@ -5,7 +5,11 @@ import {MdRemoveCircleOutline,MdAddCircleOutline,MdDelete} from 'react-icons/md'
 import { Container,ProductTable,Total} from './styles';
 import {bindActionCreators} from 'redux'
 import {formatPrice} from '../../util/format'
-function Cart({cart, total, removeFromCart, updateAmount})  {
+
+function Cart({ cart,total,limparCarrinho, finalizarCart, removeFromCart, updateAmount})  {
+  
+   
+   
    function increment(pokemon){
     updateAmount(pokemon.id, pokemon.amount + 1)
    }
@@ -13,6 +17,7 @@ function Cart({cart, total, removeFromCart, updateAmount})  {
    function decrement(pokemon){
     updateAmount(pokemon.id, pokemon.amount - 1)
    }
+  
   return (
   <Container>
     <ProductTable>
@@ -57,13 +62,19 @@ function Cart({cart, total, removeFromCart, updateAmount})  {
       ))}
     </tbody>
     </ProductTable>
+    
     <footer>
-      <button type="button">Finalizar pedido</button>
+    
+     <button type="button" onClick={()=>finalizarCart(limparCarrinho.length)}>Finalizar pedido</button>
+      
       <Total>
         <span>TOTAL</span>
       <strong>{total}</strong>
       </Total>
+      
+     
     </footer>
+    
   </Container>
   );
 }
@@ -71,8 +82,14 @@ const mapStateToProps = state => ({
 cart:state.cart.map(pokemon =>({
   ...pokemon,
   //add variavel state pokemon
+  
   subtotal: formatPrice(pokemon.order *pokemon.amount),
 })),
+limparCarrinho:state.cart.map (pokemon =>({
+  ...pokemon,
+   limparCarrinho: [pokemon.id]
+})),
+
 total:formatPrice(state.cart.reduce((total, pokemon) =>{
   return total + pokemon.order * pokemon.amount;
 }, 0)),

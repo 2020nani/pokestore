@@ -9,14 +9,39 @@ import { ProductList } from './styles';
 import * as Cartactions from '../../store/modules/cart/actions'
 class Home extends Component {
   state = {
+    x:0,
     pokemons: [],
+    offset: 0,
+    limit: 964
   };
-
-  async componentDidMount() {
+    TakeApi= async () => {
+      const {limit,offset} = this.state
+      const poks = []
+     
+      for (let i = 1; i <= limit; i++) {
+        const response = await api.get(`pokemon?offset=${parseInt(offset)}&limit=${parseInt(limit)}`);
+        console.log(response.data.results[0].name)
+       
+        poks.push(response.data)
+       
+      }
+      
+      const data = poks.map(stock =>({
+        ...stock,
+         priceFormatted: formatPrice(stock.order),
+         
+       }))  
+  
+    
+      this.setState({ pokemons: data })
+    }
+    
+  /*async componentDidMount() {
+    const {limit} = this.state
     const poks = []
    
-    for (let i = 1; i <= 100; i++) {
-      const response = await api.get(`pokemon/${i}?offset=${parseInt(this.state.offset)}&limit=${parseInt(this.state.limitlimit)}`);
+    for (let i = 1; i <= this.state.limit; i++) {
+      const response = await api.get(`pokemon/${i}?offset=${parseInt(this.state.offset)}&limit=${parseInt(limit)}`);
      
      
       poks.push(response.data)
@@ -32,9 +57,18 @@ class Home extends Component {
   
     this.setState({ pokemons: data })
     
+  }*/
+  
+  nextPage = ( ) => {
+    this.setState({
+      limit:40,
+      offset:20
+      
+    })
+    console.log(this.state.limit)
   }
  
-
+ 
   handleAddProduct = (
     pokemon
     
@@ -44,11 +78,15 @@ class Home extends Component {
     addToCartSuccess(pokemon)
   }
   render() {
+    //chamando funcao de renderiza api
+    this.TakeApi()
     const { pokemons } = this.state;
     const {amount} =this.props
     
     return (
+      
       <ProductList>
+        
         {pokemons.map(pokemon => (
           
           <li key={pokemon.id} >
@@ -72,7 +110,11 @@ class Home extends Component {
           </li>
           
         ))}
+       <div>
+        <button type="button" onClick={() => this.nextPage()
+        }>next</button>
        
+       </div>
 
       </ProductList>
       

@@ -1,7 +1,7 @@
 import produce from 'immer';
 
 export default function cart(state = [],action) {
- 
+  console.log(state.id)
   switch (action.type) {
    
     case 'ADD_TO_CART':
@@ -25,6 +25,14 @@ export default function cart(state = [],action) {
           draft.splice(pokIndex, 1);
         }
       });
+
+      case 'FINALIZAR_CART':
+        return produce(state, draft => {
+          const pokIndex = draft.findIndex(p => p.length === action.length);
+          if (pokIndex >= 0) {
+            draft.splice(pokIndex, state.length);
+          }
+        });  
 
     case '@cart/UPDATE_AMOUNT': {
       if(action.amount<=0){
