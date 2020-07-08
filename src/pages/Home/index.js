@@ -11,15 +11,15 @@ import * as Cartactions from '../../store/modules/cart/actions'
 class Home extends Component {
   state = {
     pokemons: [],
-    current:1,
-    currentFinal:20
+    
   };
-    TakeApi= async () => {
-      const {current,currentFinal} = this.state
+   
+  async componentDidMount() { 
+   
        
       const poks = []
      
-      for (let i=current ; i <= currentFinal; i++) {
+      for (let i=1 ; i <=60; i++) {
         const response =await api.get(`pokemon/${i}`)///?${parseInt(offset)}=0&limit=${parseInt(limit)}`);
         
         
@@ -36,88 +36,8 @@ class Home extends Component {
     console.log(data)
       this.setState({ pokemons: data })
     }
-    
-  /*async componentDidMount() {
-    const {limit} = this.state
-    const poks = []
-   
-    for (let i = 1; i <= this.state.limit; i++) {
-      const response = await api.get(`pokemon/${i}?offset=${parseInt(this.state.offset)}&limit=${parseInt(limit)}`);
-     
-     
-      poks.push(response.data)
-     
-    }
-    
-    const data = poks.map(stock =>({
-      ...stock,
-       priceFormatted: formatPrice(stock.order),
-       
-     }))  
-
   
-    this.setState({ pokemons: data })
-    
-  }*/
-  Page1 = ( ) => {
-    this.TakeApi()
-    this.setState({
-      currentFinal:20,
-      current:1    
-    })
-  }
-  Page2 = ( ) => {
-    this.TakeApi()
-    this.setState({
-      currentFinal:40,
-      current:21     
-    })
-  }
-  Page3 = ( ) => {
-    this.TakeApi()
-    this.setState({
-      currentFinal:60,
-      current:41    
-    })
-    console.log(this.state.limit)
-  }
-  Page4 = ( ) => {
-    this.TakeApi()
-    this.setState({
-      currentFinal:80,
-      current:61     
-    })
-  }
-  Page5 = ( ) => {
-    this.TakeApi()
-    this.setState({
-      currentFinal:100,
-      current:81     
-    })
-  }
-  Page6 = ( ) => {
-    
-    this.setState({
-      currentFinal:120,
-      current:101     
-    })
-    this.TakeApi()
-  }
-  Page7 = ( ) => {
-    
-    this.setState({
-      currentFinal:140,
-      current:121     
-    })
-    this.TakeApi()
-  }
-  Page8 = ( ) => {
-    this.TakeApi()
-    this.setState({
-      currentFinal:160,
-      current:141     
-    })
-  }
+ 
  
  
   handleAddProduct = (
@@ -136,10 +56,7 @@ class Home extends Component {
     return (
       
       <ProductList>
-        <div>
-          <p>Jogue sua pokebola</p>
-         <button type="button"  onClick={()=>this.TakeApi()}><img src={pok} width="20%" alt="pok"/></button>  
-        </div>
+        
         
         {pokemons.map(pokemon => (
           
@@ -164,26 +81,7 @@ class Home extends Component {
           </li>
           
         ))}
-       <div>
-        <button type="button" onClick={() => this.Page1()
-        }>pag1</button>
-        <button type="button" onClick={() => this.Page2()
-        }>pag2</button>
-        <button type="button" onClick={() => this.Page3()
-        }>pag3</button>
-        <button type="button" onClick={() => this.Page4()
-        }>pag4</button>
-        <button type="button" onClick={() => this.Page5()
-        }>pag5</button>
-        <button type="button" onClick={() => this.Page6()
-        }>pag6</button>
-        <button type="button" onClick={() => this.Page7()
-        }>pag7</button>
-        <button type="button" onClick={() => this.Page8()
-        }>pag8</button>
-        
        
-       </div>
 
       </ProductList>
       

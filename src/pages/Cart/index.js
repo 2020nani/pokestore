@@ -1,5 +1,6 @@
 import React from 'react';
 import {connect} from 'react-redux'
+import { Link } from 'react-router-dom';
 import * as Cartactions from '../../store/modules/cart/actions'
 import {MdRemoveCircleOutline,MdAddCircleOutline,MdDelete} from 'react-icons/md'
 import { Container,ProductTable,Total} from './styles';
@@ -64,9 +65,13 @@ function Cart({ cart,total,limparCarrinho, finalizarCart, removeFromCart, update
     </ProductTable>
     
     <footer>
-    
-     <button type="button" onClick={()=>finalizarCart(limparCarrinho.length)}>Finalizar pedido</button>
       
+    <Link to="/modal">
+      
+     <button type="button" onClick=
+     
+     {()=>finalizarCart(limparCarrinho.length)}>Finalizar pedido</button>
+     </Link>  
       <Total>
         <span>TOTAL</span>
       <strong>{total}</strong>
