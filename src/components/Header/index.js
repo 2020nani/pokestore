@@ -5,7 +5,7 @@ import { useSelector, connect } from 'react-redux';
 import api from '../../services/api'
 import { Container, Cart } from './styles';
 import { FaSearch } from "react-icons/fa"
-import logo from '../../assets/images/logo.svg';
+import logo from '../../assets/images/logo.jpg';
 
 function Header({cartSize,pokemonName}) {
   console.log(pokemonName)
@@ -14,7 +14,7 @@ function Header({cartSize,pokemonName}) {
   return (
     <Container>
       <Link to="/">
-        <img src= "" alt= "logo" />
+        <img src= {logo} alt= "logo" />
       </Link>
       
 

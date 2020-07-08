@@ -1,7 +1,10 @@
 import styled from 'styled-components';
 import { darken } from 'polished';
-
+export const Container = styled.div`
+width:100%
+`
 export const ProductList = styled.ul`
+  width:90%
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   grid-gap: 20px;
@@ -13,10 +16,11 @@ export const ProductList = styled.ul`
     background: #fff;
     border-radius: 4px;
     padding: 20px;
-
+    margin-left:5px
+    
     img {
       align-self: center;
-      max-width: 100px;
+      max-width: 150px;
     }
 
     > strong {

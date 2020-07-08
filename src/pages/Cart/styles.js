@@ -2,6 +2,7 @@ import styled from 'styled-components';
 import { darken } from 'polished';
 
 export const Container = styled.div`
+  width:90vw;
   padding: 30px;
   background: #fff;
   border-radius: 4px;
@@ -30,21 +31,23 @@ export const Container = styled.div`
 `;
 
 export const ProductTable = styled.table`
-  width: 100%;
+  max-width:500px;
 
   thead th {
+   
     color: #999;
     text-align: left;
     padding: 12px;
   }
 
   tbody td {
-    padding: 12px;
+    width:90vw;
+    padding: 2px;
     border-bottom: 1px solid #eee;
   }
 
   img {
-    height: 100px;
+    width:100px
   }
 
   strong {
@@ -67,8 +70,7 @@ export const ProductTable = styled.table`
       border: 1px solid #ddd;
       border-radius: 4px;
       color: #666;
-      padding: 6px;
-      width: 1px
+      width: 1px;
       align-items: center
     }
   }
@@ -81,6 +83,7 @@ export const ProductTable = styled.table`
 `;
 
 export const Total = styled.div`
+  width:30vw;
   display: flex;
   align-items: baseline;
 

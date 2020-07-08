@@ -1,26 +1,30 @@
-import React, { Component } from 'react';
+import React, { Component,PureComponent } from 'react';
 import { connect } from 'react-redux'
 import {bindActionCreators} from 'redux'
 import { MdAddShoppingCart } from 'react-icons/md';
 import { formatPrice } from '../../util/format'
+
 import api from '../../services/api';
-import pok from '../../assets/images/pokebola-aberta.png'
-import stock from '../../services/apiProdutos'
-import { ProductList } from './styles';
+import { ProductList,Container } from './styles';
 import * as Cartactions from '../../store/modules/cart/actions'
-class Home extends Component {
+class Home extends PureComponent {
   state = {
     pokemons: [],
-    
+    offset: 1,
+    limit : 300
   };
-   
-  async componentDidMount() { 
-   
+  async componentDidMount() {
+    await this.takeApi()
+    
+   }
+  async takeApi() {
+  //async componentDidMount() { 
+   const {offset,limit} = this.state
        
       const poks = []
      
-      for (let i=1 ; i <=60; i++) {
-        const response =await api.get(`pokemon/${i}`)///?${parseInt(offset)}=0&limit=${parseInt(limit)}`);
+      for (let i=offset; i <=limit; i++) {
+        const response =await api.get(`pokemon/${i}`);
         
         
         poks.push(response.data)
@@ -35,9 +39,18 @@ class Home extends Component {
        
     console.log(data)
       this.setState({ pokemons: data })
+      
     }
-  
- 
+   
+  /*next=()=>{
+    const {offset,limit} = this.state
+  if(offset<=2&&limit<=21){
+    this.setState({
+      offset: offset+20,
+      limit: limit+20
+    })
+  }
+  }*/
  
  
   handleAddProduct = (
@@ -48,13 +61,26 @@ class Home extends Component {
 
     addToCartSuccess(pokemon)
   }
+  
+   next= ()=>{
+    const {offset,limit} = this.state
+  if(offset<=2&&limit<=21){
+    this.setState({
+      
+      limit: 600
+    })
+  }
+   this.takeApi()
+  }
+  
   render() {
-    //chamando funcao de renderiza api
+    //chamando funcao de renderiza 
+    
     const { pokemons } = this.state;
     const {amount} =this.props
     
     return (
-      
+      <Container>
       <ProductList>
         
         
@@ -81,10 +107,8 @@ class Home extends Component {
           </li>
           
         ))}
-       
-
       </ProductList>
-      
+      </Container>
     );
   }
 
